@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="out/ide/main/gen" path="src/main/gen"/>
+	<classpathentry kind="src" output="out/ide/main/man" path="src/main/man"/>
+	<classpathentry kind="src" output="out/ide/test/gen" path="src/test/gen"/>
+	<classpathentry kind="src" output="out/ide/test/man" path="src/test/man"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.framework.support.scripting.facade.datatype"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.framework.support.scripting.facade.exception"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.framework.support.scripting.facade.message"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.framework.support.scripting.facade.service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.framework.support.scripting.facade.component"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/ecj.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/js.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/jboss-javaee.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/org.nabucco.framework.base.facade.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/org.nabucco.framework.base.impl.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/org.nabucco.common.cache.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/org.nabucco.common.extension.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/impl/org.nabucco.common.scripting.jar"/>
+	<classpathentry kind="output" path="out/ide"/>
+</classpath>
