@@ -16,35 +16,45 @@
  */
 package org.nabucco.framework.support.scripting.ui.rcp.command.script;
 
+import org.nabucco.framework.base.facade.datatype.DatatypeState;
+import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.plugin.base.Activator;
+import org.nabucco.framework.plugin.base.command.close.AbstractDeleteDatatypeHandler;
 import org.nabucco.framework.support.scripting.facade.datatype.Script;
-import org.nabucco.framework.support.scripting.facade.message.ScriptMsg;
 import org.nabucco.framework.support.scripting.ui.rcp.edit.script.model.ScriptEditBusinessModel;
 import org.nabucco.framework.support.scripting.ui.rcp.edit.script.model.ScriptEditViewModel;
+import org.nabucco.framework.support.scripting.ui.rcp.edit.script.view.ScriptEditView;
 
 /**
- * CompileScriptCommandHandleImpl
+ * SaveScriptCommandHandleImpl
  * 
- * @author Nicolas Moser, PRODYNA AG
+ * @author Silas Schwarz PRODYNA AG
  */
-public class CompileScriptCommandHandleImpl implements CompileScriptHandler {
+public class DeleteScriptCommandHandlerImpl extends AbstractDeleteDatatypeHandler<ScriptEditView> implements
+        DeleteScriptHandler {
 
     @Override
-    public void compileScript() {
+    public String getId() {
+        return ScriptEditView.ID;
+    }
 
-        ScriptEditViewModel viewModel = (ScriptEditViewModel) Activator.getDefault().getModel().getCurrentViewModel();
+    @Override
+    public void deleteScript() {
+        super.run();
+    }
+
+    @Override
+    protected boolean preClose(ScriptEditView view) throws ClientException {
+
+        ScriptEditViewModel viewModel = view.getModel();
+        Script script = viewModel.getScript();
+        script.setDatatypeState(DatatypeState.DELETED);
 
         ScriptEditBusinessModel businessModel = (ScriptEditBusinessModel) Activator.getDefault().getModel()
                 .getBusinessModel(ScriptEditBusinessModel.ID);
 
-        Script script = viewModel.getScript();
-        ScriptMsg rs = businessModel.compile(script);
-        if (rs != null && rs.getScript() != null) {
-            viewModel.setScript(rs.getScript());
-        } else {
-            Activator.getDefault().logError("Compiling script failed");
-        }
+        businessModel.save(script);
 
+        return super.preClose(view);
     }
-
 }

@@ -26,6 +26,7 @@ import org.nabucco.framework.base.facade.exception.service.MaintainException;
 @Description	Service for maintaining scripts.
 public Service ScriptMaintainService {
 	
+	@JoinPoint org.nabucco.aspect.resolving
 	@Description		Maintains a list of scritps to the database.
 	@ManualImplementation
 	public ScriptListMsg maintainScripts(ScriptListMsg msg) throws MaintainException;

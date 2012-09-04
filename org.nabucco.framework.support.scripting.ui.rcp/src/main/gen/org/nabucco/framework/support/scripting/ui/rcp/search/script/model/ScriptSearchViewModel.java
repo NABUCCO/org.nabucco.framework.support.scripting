@@ -18,7 +18,7 @@ package org.nabucco.framework.support.scripting.ui.rcp.search.script.model;
 
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
 import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.Owner;
+import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.plugin.base.component.search.model.NabuccoComponentSearchParameter;
 import org.nabucco.framework.plugin.base.component.search.model.NabuccoComponentSearchViewModel;
 import org.nabucco.framework.support.scripting.facade.datatype.Script;
@@ -41,6 +41,8 @@ public class ScriptSearchViewModel extends NabuccoComponentSearchViewModel<Scrip
     public static final String PROPERTY_SCRIPT_OWNER = "scriptOwner";
 
     public static final String PROPERTY_SCRIPT_TYPE = "scriptType";
+
+    public static final String PROPERTY_CONTEXT_TYPE = "contextType";
 
     public static String TITLE = (ID + "Title");
 
@@ -105,36 +107,6 @@ public class ScriptSearchViewModel extends NabuccoComponentSearchViewModel<Scrip
     }
 
     /**
-     * Setter for the ScriptOwner.
-     *
-     * @param newOwner the String.
-     */
-    public void setScriptOwner(String newOwner) {
-        if (((script != null) && (script.getOwner() == null))) {
-            Owner owner = new Owner();
-            script.setOwner(owner);
-        }
-        String oldVal = script.getOwner().getValue();
-        script.getOwner().setValue(newOwner);
-        this.updateProperty(PROPERTY_SCRIPT_OWNER, oldVal, newOwner);
-        if (((!oldVal.equals(newOwner)) && script.getDatatypeState().equals(DatatypeState.PERSISTENT))) {
-            script.setDatatypeState(DatatypeState.MODIFIED);
-        }
-    }
-
-    /**
-     * Getter for the ScriptOwner.
-     *
-     * @return the String.
-     */
-    public String getScriptOwner() {
-        if ((((script == null) || (script.getOwner() == null)) || (script.getOwner().getValue() == null))) {
-            return "";
-        }
-        return script.getOwner().getValue();
-    }
-
-    /**
      * Getter for the ScriptType.
      *
      * @return the String.
@@ -144,6 +116,19 @@ public class ScriptSearchViewModel extends NabuccoComponentSearchViewModel<Scrip
             return "";
         }
         return script.getType().name();
+    }
+    
+    @Override
+    public String getOwner() {
+        return super.getOwner();
+    }
+
+    public Code getContextType() {
+        return script.getContextType();
+    }
+    
+    public void setContextType(Code contextType) {
+        this.script.setContextType(contextType);
     }
 
     /**
@@ -156,7 +141,7 @@ public class ScriptSearchViewModel extends NabuccoComponentSearchViewModel<Scrip
         if ((this.script.getType() != null)) {
             oldVal = this.script.getType().name();
         }
-        this.script.setType(ScriptType.valueOf(newType));
+        this.script.setType(ScriptType.valueOf(newType.toUpperCase()));
         this.updateProperty(PROPERTY_SCRIPT_TYPE, oldVal, newType);
         if (((!oldVal.equals(newType)) && script.getDatatypeState().equals(DatatypeState.PERSISTENT))) {
             script.setDatatypeState(DatatypeState.MODIFIED);

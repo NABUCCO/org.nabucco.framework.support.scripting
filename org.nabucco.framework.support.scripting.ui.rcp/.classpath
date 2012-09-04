@@ -14,6 +14,6 @@
 	<classpathentry kind="var" path="ECLIPSE_TARGET/platform.jar"/>
 	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/rcp/org.nabucco.framework.base.facade.jar"/>
 	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/rcp/org.nabucco.framework.base.ui.rcp.jar"/>
-	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/rcp/org.nabucco.framework.plugin.base.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.framework.support.scripting/lib/rcp/org.nabucco.framework.plugin.base.jar" sourcepath="/org.nabucco.framework.plugin.base"/>
 	<classpathentry kind="output" path="out/ide"/>
 </classpath>

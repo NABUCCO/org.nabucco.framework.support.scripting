@@ -37,7 +37,7 @@ public Datatype Script extends NabuccoDatatype {
 	private Basetype Name[1] name;
 	
 	@Description		A brief description of the script.
-	private Basetype Description[1] description;
+	private Basetype Description[0..1] description;
 	
 	@Description		The owner of the script
 	private Basetype Owner[1] owner;
@@ -47,7 +47,7 @@ public Datatype Script extends NabuccoDatatype {
 	
 	@CodePath			nabucco.scripting.source
 	@Description		The context (origin) of this script.
-	private Datatype Code[0..1] contextType;
+	private Datatype Code[1] contextType;
 	
 	@MaxLength			64000
 	@Description		The script source code.

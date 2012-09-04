@@ -19,7 +19,6 @@ package org.nabucco.framework.support.scripting.ui.rcp.edit.script.model;
 import java.util.List;
 
 import org.nabucco.framework.base.facade.exception.client.ClientException;
-import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.model.BusinessModel;
 import org.nabucco.framework.support.scripting.facade.datatype.Script;
 import org.nabucco.framework.support.scripting.facade.message.ScriptListMsg;
@@ -44,7 +43,7 @@ public class ScriptEditBusinessModel implements BusinessModel {
      *            script instance
      * @return the service response message.
      */
-    public ScriptMsg compile(Script script) {
+    public ScriptMsg compile(Script script) throws ClientException {
         ScriptMsg rq = this.createScriptMsg(script);
         return compile(rq);
     }
@@ -56,7 +55,7 @@ public class ScriptEditBusinessModel implements BusinessModel {
      *            script instance
      * @return the service response message.
      */
-    public ScriptListMsg save(Script script) {
+    public ScriptListMsg save(Script script) throws ClientException {
         ScriptListMsg rq = this.createScriptListMsg(script);
         return maintain(rq);
     }
@@ -68,7 +67,7 @@ public class ScriptEditBusinessModel implements BusinessModel {
      *            a list of scripts
      * @return the service response message.
      */
-    public ScriptListMsg save(List<Script> scripts) {
+    public ScriptListMsg save(List<Script> scripts) throws ClientException {
         ScriptListMsg rq = this.createScriptListMsg(scripts.toArray(new Script[0]));
         return maintain(rq);
 
@@ -81,19 +80,12 @@ public class ScriptEditBusinessModel implements BusinessModel {
      *            the script list message
      * 
      * @return the maintained list message
+     * @throws ClientException
      */
-    private ScriptListMsg maintain(ScriptListMsg rq) {
-
-        try {
-            ScriptMaintainServiceDelegate maintainService = ScriptingComponentServiceDelegateFactory.getInstance()
-                    .getScriptMaintainService();
-
-            return maintainService.maintainScripts(rq);
-        } catch (ClientException e) {
-            Activator.getDefault().logError(e);
-        }
-
-        return new ScriptListMsg();
+    private ScriptListMsg maintain(ScriptListMsg rq) throws ClientException {
+        ScriptMaintainServiceDelegate maintainService = ScriptingComponentServiceDelegateFactory.getInstance()
+                .getScriptMaintainService();
+        return maintainService.maintainScripts(rq);
     }
 
     /**
@@ -103,19 +95,13 @@ public class ScriptEditBusinessModel implements BusinessModel {
      *            the script to compile
      * 
      * @return the compiled script
+     * @throws ClientException
      */
-    private ScriptMsg compile(ScriptMsg rq) {
+    private ScriptMsg compile(ScriptMsg rq) throws ClientException {
+        ScriptCompilationServiceDelegate compilationService = ScriptingComponentServiceDelegateFactory.getInstance()
+                .getScriptCompilationService();
 
-        try {
-            ScriptCompilationServiceDelegate compilationService = ScriptingComponentServiceDelegateFactory
-                    .getInstance().getScriptCompilationService();
-
-            return compilationService.compileScript(rq);
-        } catch (ClientException e) {
-            Activator.getDefault().logError(e);
-        }
-
-        return null;
+        return compilationService.compileScript(rq);
     }
 
     /**

@@ -26,6 +26,7 @@ import org.nabucco.framework.support.scripting.facade.message.ScriptMsg;
 @Description	Service for searching scripts.
 public Service ScriptResolveService {
 	
+	@JoinPoint org.nabucco.aspect.resolving
 	@ManualImplementation
 	public ScriptMsg resolveScript(ScriptMsg msg) throws ResolveException;
 	

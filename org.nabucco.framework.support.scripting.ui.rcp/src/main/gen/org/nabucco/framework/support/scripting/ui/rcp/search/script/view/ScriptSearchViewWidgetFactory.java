@@ -24,10 +24,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.nabucco.framework.plugin.base.component.picker.combo.CodeComboViewer;
 import org.nabucco.framework.plugin.base.component.picker.combo.ElementPickerCombo;
 import org.nabucco.framework.plugin.base.component.picker.combo.ElementPickerComboParameter;
 import org.nabucco.framework.plugin.base.layout.WidgetFactory;
 import org.nabucco.framework.plugin.base.view.NabuccoFormToolkit;
+import org.nabucco.framework.support.scripting.facade.datatype.Script;
 import org.nabucco.framework.support.scripting.ui.rcp.search.script.model.ScriptSearchViewModel;
 
 /**
@@ -50,6 +52,10 @@ public class ScriptSearchViewWidgetFactory extends WidgetFactory {
     public static final String LABEL_SCRIPTTYPE = "script.type";
 
     public static final String OBSERVE_VALUE_SCRIPTTYPE = ScriptSearchViewModel.PROPERTY_SCRIPT_TYPE;
+    
+    public static final String LABEL_SCRIPTCONTEXTTYPE = "script.contexttype";
+    
+    public static final String OBSERVE_VALUE_CONTEXTTYPE = ScriptSearchViewModel.PROPERTY_CONTEXT_TYPE;
 
     /**
      * Constructs a new ScriptSearchViewWidgetFactory instance.
@@ -140,5 +146,28 @@ public class ScriptSearchViewWidgetFactory extends WidgetFactory {
         bindingContext.bindValue(uiElement, modelElement, null, null);
         elementCombo.addSelectionListener(new ScriptSearchViewScriptTypeComboBoxHandler(model));
         return elementCombo;
+    }
+    
+    /**
+     * CreateLabelScriptContextType.
+     *
+     * @param parent the Composite.
+     * @return the Label.
+     */
+    public Label createLabelScriptContextType(Composite parent) {
+        return nabuccoFormToolKit.createRealLabel(parent, LABEL_SCRIPTCONTEXTTYPE);
+    }
+    
+    /**
+     * CreateInputFieldName.
+     * 
+     * @param parent
+     *            the Composite.
+     * @return the Text.
+     */
+    public CodeComboViewer createComboScriptContextTyp(Composite parent) {
+        CodeComboViewer codeComboViewer = new CodeComboViewer(parent,
+                Script.getContextTypeCodePath(), model, OBSERVE_VALUE_CONTEXTTYPE);
+        return codeComboViewer;
     }
 }

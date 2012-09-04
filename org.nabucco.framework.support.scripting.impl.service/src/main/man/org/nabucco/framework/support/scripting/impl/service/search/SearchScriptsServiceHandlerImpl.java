@@ -18,6 +18,7 @@ package org.nabucco.framework.support.scripting.impl.service.search;
 
 import java.util.List;
 
+import org.nabucco.framework.base.facade.component.NabuccoInstance;
 import org.nabucco.framework.base.facade.exception.persistence.PersistenceException;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.framework.base.impl.service.maintain.NabuccoQuery;
@@ -39,16 +40,23 @@ public class SearchScriptsServiceHandlerImpl extends SearchScriptsServiceHandler
 
         StringBuilder queryString = new StringBuilder();
         queryString.append("select s from Script s");
-        queryString.append(" where (s.owner = :owner)");
-        queryString.append(" and (s.name = :name or :name is null)");
+        queryString.append(" where s.owner = :owner");
+        
+        if (rq.getName() != null && rq.getName().getValue() != null) {
+            queryString.append(" and s.name LIKE '" + rq.getName() + "%'");
+        }
+        
+        if (rq.getContextType() != null && rq.getContextType().getId() != null) {
+            queryString.append(" and context_type_ref_id = ");
+            queryString.append(rq.getContextType().getId());
+        }
         queryString.append(" and (s.type = :type or :type is null)");
 
         ScriptListMsg rs = new ScriptListMsg();
 
         try {
             NabuccoQuery<Script> query = super.getPersistenceManager().createQuery(queryString.toString());
-            query.setParameter("name", rq.getName());
-            query.setParameter("owner", rq.getOwner());
+            query.setParameter("owner", rq.getOwner() == null ? NabuccoInstance.getInstance().getOwner() : rq.getOwner());
             query.setParameter("type", rq.getType());
 
             List<Script> resultList = query.getResultList();

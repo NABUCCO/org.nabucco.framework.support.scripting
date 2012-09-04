@@ -17,6 +17,7 @@
 package org.nabucco.framework.support.scripting.ui.rcp.command.script;
 
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
+import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.command.AbstractSaveCommandHandlerImpl;
 import org.nabucco.framework.support.scripting.facade.datatype.Script;
@@ -29,7 +30,7 @@ import org.nabucco.framework.support.scripting.ui.rcp.edit.script.model.ScriptEd
  * 
  * @author Silas Schwarz PRODYNA AG
  */
-public class SaveScriptCommandHandleImpl extends
+public class SaveScriptCommandHandlerImpl extends
         AbstractSaveCommandHandlerImpl<ScriptEditBusinessModel, ScriptEditViewModel> implements SaveScriptHandler {
 
     @Override
@@ -38,7 +39,7 @@ public class SaveScriptCommandHandleImpl extends
     }
 
     @Override
-    protected void saveModel(ScriptEditViewModel viewModel, ScriptEditBusinessModel businessModel) {
+    protected void saveModel(ScriptEditViewModel viewModel, ScriptEditBusinessModel businessModel) throws ClientException {
         Script script = viewModel.getScript();
         ScriptListMsg save = businessModel.save(script);
 

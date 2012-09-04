@@ -18,6 +18,7 @@ package org.nabucco.framework.support.scripting.facade.message.search;
  
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.Owner;
+import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.support.scripting.facade.datatype.ScriptType;
 
 @Author			Frank Ratschinski
@@ -35,5 +36,8 @@ public Message ScriptSearchRq {
 
 	@Description	Type of the script.	
 	private Enumeration ScriptType[0..1] type;
+	
+	@Description	The context (origin) of this script.
+	private Datatype Code[0..1] contextType;
 	
 } 

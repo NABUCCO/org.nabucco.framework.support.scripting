@@ -68,7 +68,7 @@ public class ScriptEditViewWidgetFactory extends WidgetFactory {
 
     public static final String LABEL_SCRIPTCONTEXTTYPE = "script.contexttype";
 
-    public static final String OBSERVE_VALUE_USERTYPE = ScriptEditViewModel.PROPERTY_SCRIPT_CONTEXTTYPE;
+    public static final String OBSERVE_VALUE_CONTEXTTYPE = ScriptEditViewModel.PROPERTY_SCRIPT_CONTEXTTYPE;
 
     /**
      * Constructs a new ScriptEditViewWidgetFactory instance.
@@ -246,7 +246,7 @@ public class ScriptEditViewWidgetFactory extends WidgetFactory {
      */
     public CodeComboViewer createComboScriptContextTyp(Composite parent) {
         CodeComboViewer codeComboViewer = new CodeComboViewer(parent,
-                Script.getContextTypeCodePath(), model, OBSERVE_VALUE_USERTYPE);
+                Script.getContextTypeCodePath(), model, OBSERVE_VALUE_CONTEXTTYPE);
         return codeComboViewer;
     }
 }

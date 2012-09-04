@@ -17,11 +17,9 @@
 package org.nabucco.framework.support.scripting.ui.rcp.command.script;
 
 import org.nabucco.framework.base.facade.exception.client.ClientException;
-import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.command.AbstractNabuccoOpenEditViewHandlerImpl;
 import org.nabucco.framework.support.scripting.facade.message.ScriptMsg;
 import org.nabucco.framework.support.scripting.ui.rcp.browser.script.ScriptEditViewBrowserElement;
-import org.nabucco.framework.support.scripting.ui.rcp.command.script.OpenScriptEditViewFromBrowserHandler;
 import org.nabucco.framework.support.scripting.ui.rcp.communication.ScriptingComponentServiceDelegateFactory;
 import org.nabucco.framework.support.scripting.ui.rcp.communication.resolve.ScriptResolveServiceDelegate;
 import org.nabucco.framework.support.scripting.ui.rcp.edit.script.model.ScriptEditViewModel;
@@ -47,21 +45,19 @@ public class OpenScriptEditViewFromBrowserHandlerImpl extends
     }
 
     @Override
-    protected void updateModel(ScriptEditViewBrowserElement browserElement, ScriptEditViewModel model) {
+    protected void updateModel(ScriptEditViewBrowserElement browserElement, ScriptEditViewModel model)
+            throws ClientException {
 
-        try {
-            ScriptResolveServiceDelegate resolveService = ScriptingComponentServiceDelegateFactory.getInstance()
-                    .getScriptResolveService();
+        ScriptResolveServiceDelegate resolveService = ScriptingComponentServiceDelegateFactory.getInstance()
+                .getScriptResolveService();
 
-            ScriptMsg rq = new ScriptMsg();
-            rq.setScript(browserElement.getViewModel().getScript());
+        ScriptMsg rq = new ScriptMsg();
+        rq.setScript(browserElement.getViewModel().getScript());
 
-            ScriptMsg rs = resolveService.resolveScript(rq);
+        ScriptMsg rs = resolveService.resolveScript(rq);
 
-            model.setScript(rs.getScript());
-        } catch (ClientException ce) {
-            Activator.getDefault().logError(ce);
-        }
+        model.setScript(rs.getScript());
+        model.setDirty(false);
     }
 
 }

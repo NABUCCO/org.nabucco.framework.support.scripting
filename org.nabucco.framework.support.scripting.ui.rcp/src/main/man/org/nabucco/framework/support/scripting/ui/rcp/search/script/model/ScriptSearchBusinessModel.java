@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.Owner;
+import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.component.search.model.NabuccoComponentSearchModel;
@@ -96,6 +97,7 @@ public class ScriptSearchBusinessModel implements NabuccoComponentSearchModel {
         msg.setName(this.getNameFromModel(model));
         msg.setType(this.getScriptTypeFromModel(model));
         msg.setOwner(this.getOwnerFromModel(model));
+        msg.setContextType(this.getScriptContextTypeFromModel(model));
         return msg;
     }
 
@@ -124,7 +126,7 @@ public class ScriptSearchBusinessModel implements NabuccoComponentSearchModel {
      * @return the owner
      */
     private Owner getOwnerFromModel(ScriptSearchViewModel model) {
-        String owner = model.getScriptOwner();
+        String owner = model.getOwner();
         if (owner == null || owner.isEmpty()) {
             return null;
         }
@@ -145,6 +147,10 @@ public class ScriptSearchBusinessModel implements NabuccoComponentSearchModel {
             return null;
         }
         return ScriptType.valueOf(codeType.toUpperCase());
+    }
+   
+    private Code getScriptContextTypeFromModel(ScriptSearchViewModel model) {
+        return model.getContextType();
     }
 
 }

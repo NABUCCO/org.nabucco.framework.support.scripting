@@ -17,11 +17,16 @@
 package org.nabucco.framework.support.scripting.ui.rcp.search.script.view;
 
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
+import org.nabucco.framework.base.facade.datatype.code.Code;
+import org.nabucco.framework.plugin.base.component.picker.combo.CodeComboViewer;
 import org.nabucco.framework.plugin.base.component.picker.combo.ElementPickerCombo;
 import org.nabucco.framework.plugin.base.component.picker.combo.ElementPickerComboParameter;
 import org.nabucco.framework.plugin.base.component.picker.dialog.ElementPickerContentProvider;
@@ -48,6 +53,8 @@ public class ScriptSearchViewLayouter extends BaseSearchViewLayouter<ScriptSearc
     private static final String SECTION_TITLE = ScriptSearchView.ID + ".section";
 
     private ScriptSearchViewWidgetFactory widgetFactory;
+    
+    private ScriptSearchViewModel model;
 
     @Override
     protected String getMessageOwnerId() {
@@ -58,6 +65,7 @@ public class ScriptSearchViewLayouter extends BaseSearchViewLayouter<ScriptSearc
     public Composite layoutComposite(Composite parent, NabuccoMessageManager msgManager,
             ScriptSearchViewModel model, Layoutable<ScriptSearchViewModel> view) {
 
+        this.model = model;
         this.widgetFactory = new ScriptSearchViewWidgetFactory(nabuccoFormToolKit, model);
 
         Section section = nabuccoFormToolKit.createSection(parent, SECTION_TITLE, new GridLayout(1,
@@ -71,8 +79,8 @@ public class ScriptSearchViewLayouter extends BaseSearchViewLayouter<ScriptSearc
         section.setClient(sectionBody);
 
         layoutLabelAndInputFieldName(sectionBody);
-        layoutLabelAndInputFieldOwner(sectionBody);
         layoutLabelAndComboBoxType(sectionBody);
+        layoutLabelAndInputFieldContextType(sectionBody);
 
         return section;
     }
@@ -88,20 +96,6 @@ public class ScriptSearchViewLayouter extends BaseSearchViewLayouter<ScriptSearc
         ScriptingLayouterUtility.layoutDefault(label);
 
         Text text = widgetFactory.createInputFieldScriptName(parent);
-        ScriptingLayouterUtility.layoutDefault(text);
-    }
-
-    /**
-     * Layout the search parameter owner.
-     * 
-     * @param parent
-     *            the parent composite
-     */
-    private void layoutLabelAndInputFieldOwner(Composite parent) {
-        Label label = widgetFactory.createLabelScriptOwner(parent);
-        ScriptingLayouterUtility.layoutDefault(label);
-
-        Text text = widgetFactory.createInputFieldScriptOwner(parent);
         ScriptingLayouterUtility.layoutDefault(text);
     }
 
@@ -123,6 +117,29 @@ public class ScriptSearchViewLayouter extends BaseSearchViewLayouter<ScriptSearc
 
         ElementPickerCombo combo = widgetFactory.createElementComboScriptType(parent, parameter);
         ScriptingLayouterUtility.layoutDefault(combo);
+    }
+    
+    /**
+     * Layout the user type.
+     * 
+     * @param parent
+     *            the parent section
+     */
+    private void layoutLabelAndInputFieldContextType(Composite parent) {
+        Label label = widgetFactory.createLabelScriptContextType(parent);
+        ScriptingLayouterUtility.layoutDefault(label);
+
+        CodeComboViewer comboViewer = widgetFactory.createComboScriptContextTyp(parent);
+        ScriptingLayouterUtility.layoutDefault(comboViewer.getCombo());
+        comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+            
+            @Override
+            public void selectionChanged(SelectionChangedEvent event) {
+                StructuredSelection selection = (StructuredSelection) event.getSelection();
+                Code code = (Code) selection.getFirstElement();
+                ScriptSearchViewLayouter.this.model.getScript().setContextType(code);
+            }
+        });
     }
 
 }

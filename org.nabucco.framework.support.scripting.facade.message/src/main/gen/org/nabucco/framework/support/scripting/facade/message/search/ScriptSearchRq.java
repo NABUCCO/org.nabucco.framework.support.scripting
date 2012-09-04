@@ -1,18 +1,16 @@
 /*
  * Copyright 2012 PRODYNA AG
- *
- * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
  * http://www.opensource.org/licenses/eclipse-1.0.php or
  * http://www.nabucco.org/License.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.framework.support.scripting.facade.message.search;
 
@@ -22,9 +20,11 @@ import java.util.Map;
 import java.util.Set;
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.Owner;
+import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
 import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
 import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
@@ -41,13 +41,15 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;u0,n;m0,1;", "l3,12;u0,n;m1,1;", "m0,1;" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;u0,n;m0,1;", "l3,12;u0,n;m1,1;", "m0,1;", "m0,1;" };
 
     public static final String NAME = "name";
 
     public static final String OWNER = "owner";
 
     public static final String TYPE = "type";
+
+    public static final String CONTEXTTYPE = "contextType";
 
     /** Name of the script. */
     private Name name;
@@ -57,6 +59,9 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
 
     /** Type of the script. */
     private ScriptType type;
+
+    /** The context (origin) of this script. */
+    private Code contextType;
 
     /** Constructs a new ScriptSearchRq instance. */
     public ScriptSearchRq() {
@@ -81,6 +86,8 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
                 PropertyDescriptorSupport.createBasetype(OWNER, Owner.class, 1, PROPERTY_CONSTRAINTS[1], false));
         propertyMap.put(TYPE,
                 PropertyDescriptorSupport.createEnumeration(TYPE, ScriptType.class, 2, PROPERTY_CONSTRAINTS[2], false));
+        propertyMap.put(CONTEXTTYPE, PropertyDescriptorSupport.createDatatype(CONTEXTTYPE, Code.class, 3,
+                PROPERTY_CONSTRAINTS[3], false, PropertyAssociationType.COMPONENT));
         return new NabuccoPropertyContainer(propertyMap);
     }
 
@@ -95,6 +102,7 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
         properties.add(super.createProperty(ScriptSearchRq.getPropertyDescriptor(NAME), this.name));
         properties.add(super.createProperty(ScriptSearchRq.getPropertyDescriptor(OWNER), this.owner));
         properties.add(super.createProperty(ScriptSearchRq.getPropertyDescriptor(TYPE), this.getType()));
+        properties.add(super.createProperty(ScriptSearchRq.getPropertyDescriptor(CONTEXTTYPE), this.getContextType()));
         return properties;
     }
 
@@ -111,6 +119,9 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
             return true;
         } else if ((property.getName().equals(TYPE) && (property.getType() == ScriptType.class))) {
             this.setType(((ScriptType) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(CONTEXTTYPE) && (property.getType() == Code.class))) {
+            this.setContextType(((Code) property.getInstance()));
             return true;
         }
         return false;
@@ -146,6 +157,11 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
                 return false;
         } else if ((!this.type.equals(other.type)))
             return false;
+        if ((this.contextType == null)) {
+            if ((other.contextType != null))
+                return false;
+        } else if ((!this.contextType.equals(other.contextType)))
+            return false;
         return true;
     }
 
@@ -156,6 +172,7 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
         result = ((PRIME * result) + ((this.name == null) ? 0 : this.name.hashCode()));
         result = ((PRIME * result) + ((this.owner == null) ? 0 : this.owner.hashCode()));
         result = ((PRIME * result) + ((this.type == null) ? 0 : this.type.hashCode()));
+        result = ((PRIME * result) + ((this.contextType == null) ? 0 : this.contextType.hashCode()));
         return result;
     }
 
@@ -216,6 +233,24 @@ public class ScriptSearchRq extends ServiceMessageSupport implements ServiceMess
      */
     public void setType(ScriptType type) {
         this.type = type;
+    }
+
+    /**
+     * The context (origin) of this script.
+     *
+     * @return the Code.
+     */
+    public Code getContextType() {
+        return this.contextType;
+    }
+
+    /**
+     * The context (origin) of this script.
+     *
+     * @param contextType the Code.
+     */
+    public void setContextType(Code contextType) {
+        this.contextType = contextType;
     }
 
     /**

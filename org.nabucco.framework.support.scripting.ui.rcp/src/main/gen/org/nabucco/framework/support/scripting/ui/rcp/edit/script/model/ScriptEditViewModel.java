@@ -27,6 +27,7 @@ import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.plugin.base.component.edit.model.EditViewModel;
 import org.nabucco.framework.plugin.base.logging.Loggable;
 import org.nabucco.framework.support.scripting.facade.datatype.Script;
+import org.nabucco.framework.support.scripting.facade.datatype.ScriptCode;
 import org.nabucco.framework.support.scripting.facade.datatype.ScriptSourceCode;
 import org.nabucco.framework.support.scripting.facade.datatype.ScriptType;
 
@@ -53,7 +54,9 @@ public class ScriptEditViewModel extends EditViewModel implements Loggable {
 
     public static final String PROPERTY_SCRIPT_SOURCECODE = "scriptSourcecode";
 
-    public static final String PROPERTY_SCRIPT_CONTEXTTYPE = "scriptContexttype";
+    public static final String PROPERTY_SCRIPT_BYTEECODE = "scriptBytecode";
+
+    public static final String PROPERTY_SCRIPT_CONTEXTTYPE = "scriptContextType";
 
     /** Constructs a new ScriptEditViewModel instance. */
     public ScriptEditViewModel() {
@@ -81,6 +84,8 @@ public class ScriptEditViewModel extends EditViewModel implements Loggable {
         result.put(PROPERTY_SCRIPT_NAME, this.getScriptName());
         result.put(PROPERTY_SCRIPT_SOURCECODE, this.getScriptSourcecode());
         result.put(PROPERTY_SCRIPT_OWNER, this.getScriptOwner());
+        result.put(PROPERTY_SCRIPT_CONTEXTTYPE, this.getScriptContextType());
+        result.put(PROPERTY_SCRIPT_BYTEECODE, this.getScriptBytecode());
         return result;
     }
 
@@ -103,11 +108,15 @@ public class ScriptEditViewModel extends EditViewModel implements Loggable {
                 ((newValue != null) ? newValue.getOwner() : ""));
         this.updateProperty(PROPERTY_SCRIPT_TYPE, ((oldValue != null) ? oldValue.getType() : ""),
                 ((newValue != null) ? newValue.getType() : ""));
+        this.updateProperty(PROPERTY_SCRIPT_BYTEECODE, ((oldValue != null) ? oldValue.getCode() : ""),
+                ((newValue != null) ? newValue.getCode() : ""));
         this.updateProperty(PROPERTY_SCRIPT_CONTEXTTYPE,
-                ((oldValue != null) ? (oldValue.getContextType() != null ? oldValue.getContextType()
-                        : null) : null),
-                ((newValue != null) ? (newValue.getContextType() != null ? newValue.getContextType()
-                        : null) : null));
+                ((oldValue != null) ? (oldValue.getContextType() != null ? oldValue.getContextType() : null) : null),
+                ((newValue != null) ? (newValue.getContextType() != null ? newValue.getContextType() : null) : null));
+        
+        if (oldValue != null && !oldValue.equals(this.script) && this.script.getDatatypeState() == DatatypeState.PERSISTENT) {
+            this.script.setDatatypeState(DatatypeState.MODIFIED);
+        }
     }
 
     /**
@@ -282,6 +291,10 @@ public class ScriptEditViewModel extends EditViewModel implements Loggable {
             Code oldValue = this.script.getContextType();
             this.script.setContextType(scriptContextType);
             this.updateProperty(PROPERTY_SCRIPT_CONTEXTTYPE, oldValue, scriptContextType);
+
+            if (this.script.getDatatypeState() == DatatypeState.PERSISTENT) {
+                this.script.setDatatypeState(DatatypeState.MODIFIED);
+            }
         }
     }
 
@@ -293,5 +306,15 @@ public class ScriptEditViewModel extends EditViewModel implements Loggable {
             return null;
         }
         return this.script.getContextType();
+    }
+
+    /**
+     * @return Returns the scriptContextType.
+     */
+    public ScriptCode getScriptBytecode() {
+        if (this.script == null) {
+            return null;
+        }
+        return this.script.getCode();
     }
 }
